@@ -45,6 +45,7 @@ function showStep(stepId) {
   document.getElementById('hypertension')?.addEventListener('change', evaluateCardioConditions);
   document.getElementById('tachycardia')?.addEventListener('change', evaluateCardioConditions);
   document.getElementById('thrombo')?.addEventListener('change', evaluateCardioConditions);
+  document.getElementById('stroke')?.addEventListener('change', evaluateNeuroConditions);
 
   
   function evaluateCardioConditions() {
@@ -57,6 +58,16 @@ function showStep(stepId) {
     evaluateTachycardia();
     evaluateThrombo();
   }
+
+  function evaluateNeuroConditions() {
+    evaluateStroke();
+  }
+
+  function evaluateAllConditions() {
+    evaluateCardioConditions();
+    evaluateNeuroConditions(); // ✅ Add this line
+  }
+  
   
   // AFib
   function evaluateAFib() {
@@ -535,4 +546,55 @@ function evaluateThrombo() {
       `;
     }
   }
+
+// Stroke (CVA)
+function evaluateStroke() {
+  const stroke = document.getElementById('stroke');
+  const strokeInfo = document.getElementById('stroke-info');
+  strokeInfo.innerHTML = "";
+  if (!stroke.checked) return;
+
+  strokeInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Was the stroke caused by a clot (ischemic) or a bleed (hemorrhagic)?</label>
+      <select id="stroke-type">
+        <option value="">-- Select --</option>
+        <option value="ischemic">Ischemic (clot)</option>
+        <option value="hemorrhagic">Hemorrhagic (bleed)</option>
+        <option value="unknown">Not sure</option>
+      </select>
+      <div id="stroke-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('stroke-type').addEventListener('change', showStrokeChecklist);
+}
+
+function showStrokeChecklist(e) {
+  const type = e.target.value;
+  const div = document.getElementById('stroke-followup');
+
+  if (type === "ischemic" || type === "hemorrhagic") {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA review is required for any cerebrovascular accident (CVA).<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist evaluation</li>
+          <li>Neuroimaging results (MRI/CT)</li>
+          <li>Current cognitive and motor status</li>
+          <li>Any follow-up rehabilitation summary</li>
+        </ul>
+        ⚠️ FAA typically defers initial certification for at least 6 months post-event.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Please consult with your neurologist and identify the stroke type. FAA will require documentation either way.
+      </div>
+    `;
+  }
+}
+
     
