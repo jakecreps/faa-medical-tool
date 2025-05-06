@@ -47,9 +47,8 @@ function showStep(stepId) {
   document.getElementById('thrombo')?.addEventListener('change', evaluateCardioConditions);
   document.getElementById('stroke')?.addEventListener('change', evaluateNeuroConditions);
   document.getElementById('seizure')?.addEventListener('change', evaluateNeuroConditions);
+  document.getElementById('migraine')?.addEventListener('change', evaluateNeuroConditions);
 
-
-  
   function evaluateCardioConditions() {
     evaluateAFib();
     evaluateCHD();
@@ -64,6 +63,7 @@ function showStep(stepId) {
   function evaluateNeuroConditions() {
     evaluateStroke();
     evaluateSeizure();
+    evaluateMigraine();
   }
 
   function evaluateAllConditions() {
@@ -646,6 +646,59 @@ function showSeizureChecklist(e) {
     `;
   }
 }
+
+// Migraine
+function evaluateMigraine() {
+  const migraine = document.getElementById('migraine');
+  const migraineInfo = document.getElementById('migraine-info');
+  migraineInfo.innerHTML = "";
+  if (!migraine.checked) return;
+
+  migraineInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>💥 Do your migraines cause visual disturbances, confusion, or neurological symptoms?</label>
+      <select id="migraine-symptoms">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="migraine-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('migraine-symptoms').addEventListener('change', showMigraineChecklist);
+}
+
+function showMigraineChecklist(e) {
+  const div = document.getElementById('migraine-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Simple migraines with no neurologic impact may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Clinical notes from treating provider</li>
+          <li>Frequency and severity description</li>
+          <li>Medication list</li>
+        </ul>
+        ⚠️ FAA may require periodic status updates.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Complex migraines with aura or neurologic symptoms require detailed FAA review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist evaluation</li>
+          <li>EEG or imaging if performed</li>
+          <li>Impact on flight performance and history</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
 
 
     
