@@ -46,6 +46,8 @@ function showStep(stepId) {
   document.getElementById('tachycardia')?.addEventListener('change', evaluateCardioConditions);
   document.getElementById('thrombo')?.addEventListener('change', evaluateCardioConditions);
   document.getElementById('stroke')?.addEventListener('change', evaluateNeuroConditions);
+  document.getElementById('seizure')?.addEventListener('change', evaluateNeuroConditions);
+
 
   
   function evaluateCardioConditions() {
@@ -61,6 +63,7 @@ function showStep(stepId) {
 
   function evaluateNeuroConditions() {
     evaluateStroke();
+    evaluateSeizure();
   }
 
   function evaluateAllConditions() {
@@ -596,5 +599,53 @@ function showStrokeChecklist(e) {
     `;
   }
 }
+
+// Seizure Disorder / Epilepsy
+function evaluateSeizure() {
+  const seizure = document.getElementById('seizure');
+  const seizureInfo = document.getElementById('seizure-info');
+  seizureInfo.innerHTML = "";
+  if (!seizure.checked) return;
+
+  seizureInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Have you been seizure-free for at least 10 years, and off anti-seizure meds?</label>
+      <select id="seizure-free">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="seizure-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('seizure-free').addEventListener('change', showSeizureChecklist);
+}
+
+function showSeizureChecklist(e) {
+  const div = document.getElementById('seizure-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ May be eligible for FAA review under Special Issuance protocols.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist statement confirming seizure-free status ≥10 years</li>
+          <li>Documentation that no anti-seizure medications are in use</li>
+          <li>Normal neurologic exam</li>
+          <li>EEG and imaging reports (if available)</li>
+        </ul>
+        ⚠️ FAA still makes case-by-case decisions.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⛔ FAA will not issue a medical certificate unless seizure-free ≥10 years and off medications. Delay submission.
+      </div>
+    `;
+  }
+}
+
 
     
