@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAA Pilot Medical Assistant</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav>
+    <h2>Pilot Medical Tool</h2>
+    <ul>
+      <li><a onclick="showStep('start')">Start</a></li>
+      <li><a onclick="showStep('medical')">Medical History</a></li>
+      <li><a onclick="showStep('medications')">Medications</a></li>
+      <li><a onclick="showStep('summary')">Summary</a></li>
+    </ul>
+  </nav>
+  <main>
+    <section id="start" class="active">
+      <h3>Step 1: Choose Certificate</h3>
+      <label for="pilotName">Full Name</label>
+      <input type="text" id="pilotName" placeholder="e.g. John Doe">
+      <label for="flightHours">Total Flight Hours</label>
+      <input type="number" id="flightHours" placeholder="e.g. 1200">
+      <label for="certClass">Medical Certificate Class</label>
+      <select id="certClass">
+        <option value="1st">1st Class - Airline Transport Pilot</option>
+        <option value="2nd">2nd Class - Commercial Pilot</option>
+        <option value="3rd">3rd Class - Private Pilot</option>
+      </select>
+      <div class="note">Each class has different vision, hearing, and cardiovascular requirements based on role.</div>
+      <button onclick="nextStep('medical')">Next</button>
+    </section>
+
+    <section id="medical">
+      <h3>Step 2: Medical History</h3>
+      <div class="note">Select any that apply. Most conditions will require additional documentation or Special Issuance review under FAR 67.401.</div>
+
+
+      <h4>🫀 Cardiovascular</h4>
+      <label><input type="checkbox" id="afib"> Atrial Fibrillation (AFib)</label>
+      <div id="afib-info" class="medical-guidance"></div>
+      
+      <label><input type="checkbox" id="chd"> Coronary Heart Disease (CHD)</label>
+      <div id="chd-info" class="medical-guidance"></div> 
+
+      <label><input type="checkbox" id="valve"> Mitral or Aortic Valve Issues</label>
+      <div id="valve-info" class="medical-guidance"></div> 
+
+      <label><input type="checkbox" id="pat"> Paroxysmal Atrial Tachycardia (PAT)</label>
+      <div id="pat-info" class="medical-guidance"></div>    
+
+      <label><input type="checkbox" id="pacemaker"> Pacemaker / Defibrillator</label>
+      <div id="pacemaker-info" class="medical-guidance"></div>  
+
+      <label><input type="checkbox" id="hypertension"> Hypertension</label>
+      <div id="hypertension-info" class="medical-guidance"></div>   
+
+      <label><input type="checkbox" id="tachycardia"> Tachycardia</label>
+      <div id="tachycardia-info" class="medical-guidance"></div>
+      
+      <label><input type="checkbox" id="thrombo"> Thromboembolic Disease (DVT, PE)</label>
+      <div id="thrombo-info" class="medical-guidance"></div>
+
+      <h4>🧠 Neurologic</h4>
+      <label><input type="checkbox"> Stroke (CVA)</label>
+      <label><input type="checkbox"> Seizure Disorder / Epilepsy</label>
+      <label><input type="checkbox"> Migraine</label>
+      <label><input type="checkbox"> Neurofibromatosis Type 1 (NF1)</label>
+      <label><input type="checkbox"> Multiple Sclerosis (MS)</label>
+      <label><input type="checkbox"> Traumatic Brain Injury (TBI)</label>
+      <label><input type="checkbox"> Parkinson’s Disease</label>
+
+      <h4>🧠 Psychiatric / Behavioral</h4>
+      <label><input type="checkbox"> Depression / Anxiety</label>
+      <label><input type="checkbox"> Bipolar Disorder</label>
+      <label><input type="checkbox"> ADHD / ADD</label>
+      <label><input type="checkbox"> Schizophrenia</label>
+      <label><input type="checkbox"> Personality Disorders</label>
+      <label><input type="checkbox"> PTSD</label>
+      <label><input type="checkbox"> SSRI Use</label>
+
+      <h4>💉 Endocrine / Metabolic</h4>
+      <label><input type="checkbox"> Diabetes Mellitus</label>
+      <label><input type="checkbox"> Hypothyroidism</label>
+      <label><input type="checkbox"> Hyperthyroidism</label>
+      <label><input type="checkbox"> Obesity (treated)</label>
+      <label><input type="checkbox"> Prediabetes</label>
+      <label><input type="checkbox"> Low Testosterone</label>
+
+      <h4>👁️ Eye / Vision</h4>
+      <label><input type="checkbox"> Glaucoma</label>
+      <label><input type="checkbox"> Retinopathy</label>
+      <label><input type="checkbox"> Ocular Motility Disorder</label>
+      <label><input type="checkbox"> Cataracts / Lens Replacement</label>
+
+      <h4>👂 ENT</h4>
+      <label><input type="checkbox"> Hearing Loss</label>
+      <label><input type="checkbox"> Vertigo / Meniere’s</label>
+      <label><input type="checkbox"> Chronic Sinusitis</label>
+
+      <h4>🫁 Pulmonary</h4>
+      <label><input type="checkbox"> Asthma</label>
+      <label><input type="checkbox"> COPD</label>
+      <label><input type="checkbox"> Sleep Apnea</label>
+
+      <h4>🧬 Hematologic / Immune</h4>
+      <label><input type="checkbox"> Thrombocytopenia</label>
+      <label><input type="checkbox"> Anemia (significant)</label>
+      <label><input type="checkbox"> Lymphoma / Hodgkin’s Disease</label>
+
+      <h4>🧠 Oncologic / Cancer</h4>
+      <label><input type="checkbox"> Bladder Cancer</label>
+      <label><input type="checkbox"> Breast Cancer</label>
+      <label><input type="checkbox"> Colon Cancer</label>
+      <label><input type="checkbox"> Melanoma</label>
+      <label><input type="checkbox"> Prostate Cancer</label>
+      <label><input type="checkbox"> Renal Cancer</label>
+      <label><input type="checkbox"> Testicular Cancer</label>
+
+      <h4>🚽 GI / GU</h4>
+      <label><input type="checkbox"> Colitis (IBD, Crohn’s)</label>
+      <label><input type="checkbox"> Hepatitis</label>
+      <label><input type="checkbox"> Renal Calculi</label>
+      <label><input type="checkbox"> Genitourinary Tumors</label>
+
+      <h4>🦴 Musculoskeletal</h4>
+      <label><input type="checkbox"> Arthritis (RA, OA)</label>
+      <label><input type="checkbox"> Musculoskeletal Injuries</label>
+      <label><input type="checkbox"> Spinal Disorders</label>
+
+      <h4>🧴 Dermatologic</h4>
+      <label><input type="checkbox"> Psoriasis (systemic)</label>
+
+      <h4>🚫 Substance Use</h4>
+      <label><input type="checkbox"> Alcohol Dependence/Abuse</label>
+      <label><input type="checkbox"> Drug Use</label>
+      <label><input type="checkbox"> HIMS Monitoring</label>
+
+      <button onclick="nextStep('medications')">Next</button>
+    </section>
+
+    <section id="medications">
+      <h3>Step 3: Current Medications</h3>
+      <label for="ssri">Are you currently using an SSRI (e.g., Zoloft, Prozac)?</label>
+      <select id="ssri" onchange="evaluateMedications()">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <label for="insulin">Are you insulin-dependent?</label>
+      <select id="insulin" onchange="evaluateMedications()">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <label for="bloodThinner">Do you take anticoagulants (e.g., Warfarin)?</label>
+      <select id="bloodThinner" onchange="evaluateMedications()">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <label for="benzos">Do you take benzodiazepines (e.g., Xanax, Ativan)?</label>
+      <select id="benzos" onchange="evaluateMedications()">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="medFlags"></div>
+      <div class="note">Note: FAA maintains a list of disqualifying medications. Always consult with an AME.</div>
+      <button onclick="nextStep('summary')">Next</button>
+    </section>
+
+    <section id="summary">
+      <h3>Summary</h3>
+      <p>Your answers have been evaluated. Review flagged items before submitting to an AME.</p>
+      <div class="summary-item"><strong>Name:</strong> <span id="summaryName"></span></div>
+      <div class="summary-item"><strong>Flight Hours:</strong> <span id="summaryHours"></span></div>
+      <div class="summary-item"><strong>Certificate Class:</strong> <span id="summaryCert"></span></div>
+      <div id="finalFlags"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
