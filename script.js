@@ -48,6 +48,10 @@ function showStep(stepId) {
   document.getElementById('stroke')?.addEventListener('change', evaluateNeuroConditions);
   document.getElementById('seizure')?.addEventListener('change', evaluateNeuroConditions);
   document.getElementById('migraine')?.addEventListener('change', evaluateNeuroConditions);
+  document.getElementById('nf1')?.addEventListener('change', evaluateNeuroConditions);
+  document.getElementById('ms')?.addEventListener('change', evaluateNeuroConditions);
+  document.getElementById('tbi')?.addEventListener('change', evaluateNeuroConditions);
+  document.getElementById('parkinsons')?.addEventListener('change', evaluateNeuroConditions);
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -64,11 +68,15 @@ function showStep(stepId) {
     evaluateStroke();
     evaluateSeizure();
     evaluateMigraine();
+    evaluateNF1();
+    evaluateMS();
+    evaluateTBI();
+    evaluateParkinsons();
   }
 
   function evaluateAllConditions() {
     evaluateCardioConditions();
-    evaluateNeuroConditions(); // ✅ Add this line
+    evaluateNeuroConditions();
   }
   
   
@@ -693,6 +701,217 @@ function showMigraineChecklist(e) {
           <li>Neurologist evaluation</li>
           <li>EEG or imaging if performed</li>
           <li>Impact on flight performance and history</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Neurofibromatosis Type 1 (NF1)
+function evaluateNF1() {
+  const nf1 = document.getElementById('nf1');
+  const nf1Info = document.getElementById('nf1-info');
+  nf1Info.innerHTML = "";
+  if (!nf1.checked) return;
+
+  nf1Info.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧬 Have any tumors or lesions affected your vision, brain, or spine?</label>
+      <select id="nf1-impact">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="nf1-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('nf1-impact').addEventListener('change', showNF1Checklist);
+}
+
+function showNF1Checklist(e) {
+  const div = document.getElementById('nf1-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may approve if there are no functional neurological or visual impairments.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Clinical summary from neurologist or geneticist</li>
+          <li>Confirmation of no CNS involvement or deficits</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ CNS or visual involvement requires FAA case-by-case review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist evaluation</li>
+          <li>MRI or imaging results</li>
+          <li>Functional assessment and treatment plan</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Multiple Sclerosis (MS)
+function evaluateMS() {
+  const ms = document.getElementById('ms');
+  const msInfo = document.getElementById('ms-info');
+  msInfo.innerHTML = "";
+  if (!ms.checked) return;
+
+  msInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Are you currently experiencing any neurologic symptoms affecting motor, vision, or cognition?</label>
+      <select id="ms-symptoms">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="ms-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('ms-symptoms').addEventListener('change', showMSChecklist);
+}
+
+function showMSChecklist(e) {
+  const div = document.getElementById('ms-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Asymptomatic MS with stable imaging may be certifiable under FAA Special Issuance.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist report confirming stability</li>
+          <li>Recent MRI (brain and spinal cord)</li>
+          <li>Neurologic exam with no functional deficits</li>
+        </ul>
+        ⚠️ FAA will review history and imaging before issuing.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active neurologic symptoms require FAA review and likely deferral.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist assessment</li>
+          <li>Detailed MRI and symptom history</li>
+          <li>Functional evaluation for vision, mobility, and cognition</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Traumatic Brain Injury (TBI)
+function evaluateTBI() {
+  const tbi = document.getElementById('tbi');
+  const tbiInfo = document.getElementById('tbi-info');
+  tbiInfo.innerHTML = "";
+  if (!tbi.checked) return;
+
+  tbiInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Was your TBI classified as mild, moderate, or severe?</label>
+      <select id="tbi-type">
+        <option value="">-- Select --</option>
+        <option value="mild">Mild</option>
+        <option value="moderate">Moderate</option>
+        <option value="severe">Severe</option>
+      </select>
+      <div id="tbi-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('tbi-type').addEventListener('change', showTBIChecklist);
+}
+
+function showTBIChecklist(e) {
+  const type = e.target.value;
+  const div = document.getElementById('tbi-followup');
+
+  if (type === "mild") {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Mild TBI (no loss of consciousness >30 min, no skull fracture) may be certifiable after recovery.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist or neuropsych evaluation</li>
+          <li>Normal CT or MRI scan (if done)</li>
+          <li>No residual cognitive or behavioral symptoms</li>
+        </ul>
+        ⚠️ FAA may require cognitive testing depending on history.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Moderate to severe TBI requires full FAA neurologic and cognitive review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist and neuropsychologist evaluations</li>
+          <li>MRI or CT scan results</li>
+          <li>Cognitive testing results (e.g. CogScreen)</li>
+          <li>Recovery timeline and treatment history</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Parkinson’s Disease
+function evaluateParkinsons() {
+  const pd = document.getElementById('parkinsons');
+  const pdInfo = document.getElementById('parkinsons-info');
+  pdInfo.innerHTML = "";
+  if (!pd.checked) return;
+
+  pdInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Are your motor or cognitive symptoms currently well-controlled with treatment?</label>
+      <select id="pd-controlled">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="pd-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('pd-controlled').addEventListener('change', showParkinsonsChecklist);
+}
+
+function showParkinsonsChecklist(e) {
+  const div = document.getElementById('pd-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may consider certification under Special Issuance for well-controlled cases.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist evaluation with functional status</li>
+          <li>Neuropsychological testing</li>
+          <li>Medication list and effectiveness</li>
+          <li>MRI (if available)</li>
+        </ul>
+        ⚠️ Ongoing monitoring will be required.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⛔ If symptoms significantly affect coordination or cognition, FAA will likely defer or deny certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurologist report</li>
+          <li>Functional and cognitive status evaluation</li>
+          <li>History of progression and current treatment</li>
         </ul>
       </div>
     `;
