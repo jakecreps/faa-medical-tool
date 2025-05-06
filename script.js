@@ -52,6 +52,13 @@ function showStep(stepId) {
   document.getElementById('ms')?.addEventListener('change', evaluateNeuroConditions);
   document.getElementById('tbi')?.addEventListener('change', evaluateNeuroConditions);
   document.getElementById('parkinsons')?.addEventListener('change', evaluateNeuroConditions);
+  document.getElementById('depression')?.addEventListener('change', evaluatePsychConditions);
+  document.getElementById('bipolar')?.addEventListener('change', evaluatePsychConditions);
+  document.getElementById('adhd')?.addEventListener('change', evaluatePsychConditions);
+  document.getElementById('schizophrenia')?.addEventListener('change', evaluatePsychConditions);
+  document.getElementById('personality')?.addEventListener('change', evaluatePsychConditions);
+  document.getElementById('ptsd')?.addEventListener('change', evaluatePsychConditions);
+  document.getElementById('ssri-history')?.addEventListener('change', evaluatePsychConditions);
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -74,9 +81,20 @@ function showStep(stepId) {
     evaluateParkinsons();
   }
 
+  function evaluatePsychConditions() {
+    evaluateDepression();
+    evaluateBipolar();
+    evaluateADHD();
+    evaluateSchizophrenia();
+    evaluatePersonality();
+    evaluatePTSD();
+    evaluateSSRIHistory();
+  }  
+
   function evaluateAllConditions() {
     evaluateCardioConditions();
     evaluateNeuroConditions();
+    evaluatePsychConditions();
   }
   
   
@@ -918,6 +936,368 @@ function showParkinsonsChecklist(e) {
   }
 }
 
+// Depression / Anxiety
+function evaluateDepression() {
+  const dep = document.getElementById('depression');
+  const depInfo = document.getElementById('depression-info');
+  depInfo.innerHTML = "";
+  if (!dep.checked) return;
+
+  depInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Are you currently taking medication for depression or anxiety?</label>
+      <select id="depression-meds">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="depression-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('depression-meds').addEventListener('change', showDepressionChecklist);
+}
+
+function showDepressionChecklist(e) {
+  const div = document.getElementById('depression-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Mild, resolved depression or anxiety without medication may be cleared.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current mental health status from treating provider</li>
+          <li>History of symptoms and resolution</li>
+        </ul>
+        ⚠️ FAA may request further psychiatric evaluation based on history.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active treatment with medication requires FAA Special Issuance review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Psychiatric evaluation</li>
+          <li>Medication list, dosage, and side effect profile</li>
+          <li>Mental health history and current stability assessment</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Bipolar Disorder
+function evaluateBipolar() {
+  const bp = document.getElementById('bipolar');
+  const bpInfo = document.getElementById('bipolar-info');
+  bpInfo.innerHTML = "";
+  if (!bp.checked) return;
+
+  bpInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🔍 Have you been stable for at least 2 years with no hospitalizations or medication changes?</label>
+      <select id="bipolar-stable">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="bipolar-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('bipolar-stable').addEventListener('change', showBipolarChecklist);
+}
+
+function showBipolarChecklist(e) {
+  const div = document.getElementById('bipolar-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Bipolar Disorder is considered a disqualifying condition by the FAA in most cases.<br><br>
+        <strong>📋 Required Documentation (for Special Issuance consideration):</strong>
+        <ul>
+          <li>Comprehensive psychiatric evaluation</li>
+          <li>Medication records and stability timeline</li>
+          <li>Neurocognitive testing (CogScreen-AE)</li>
+          <li>No hospitalizations or episodes in ≥2 years</li>
+        </ul>
+        ❗ FAA decision is case-by-case and usually deferred.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⛔ FAA will not certify pilots with recent bipolar episodes or instability.<br><br>
+        You must demonstrate long-term control and undergo psychiatric review.
+      </div>
+    `;
+  }
+}
+
+// ADHD / ADD
+function evaluateADHD() {
+  const adhd = document.getElementById('adhd');
+  const adhdInfo = document.getElementById('adhd-info');
+  adhdInfo.innerHTML = "";
+  if (!adhd.checked) return;
+
+  adhdInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Are you currently taking any medication for ADHD?</label>
+      <select id="adhd-meds">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="adhd-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('adhd-meds').addEventListener('change', showADHDChecklist);
+}
+
+function showADHDChecklist(e) {
+  const div = document.getElementById('adhd-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may consider certification if off meds and asymptomatic.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Detailed clinical history</li>
+          <liPsychiatric or neuropsych evaluation</li>
+          <li>Evidence of stable functioning (e.g. education, work)</li>
+        </ul>
+        ⚠️ FAA may still require CogScreen or additional testing.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active use of ADHD medication (e.g., stimulants) requires FAA Special Issuance.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current psychiatric evaluation</li>
+          <li>CogScreen-AE neurocognitive testing</li>
+          <li>Stability and performance verification</li>
+        </ul>
+        ❗ FAA decisions are case-by-case and often deferred.
+      </div>
+    `;
+  }
+}
+
+// Schizophrenia
+function evaluateSchizophrenia() {
+  const sz = document.getElementById('schizophrenia');
+  const szInfo = document.getElementById('schizophrenia-info');
+  szInfo.innerHTML = "";
+  if (!sz.checked) return;
+
+  szInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Have you had any symptoms (delusions, hallucinations, disorganized thinking) in the last 5 years?</label>
+      <select id="schizo-symptoms">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="schizophrenia-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('schizo-symptoms').addEventListener('change', showSchizophreniaChecklist);
+}
+
+function showSchizophreniaChecklist(e) {
+  const div = document.getElementById('schizophrenia-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ FAA certification for schizophrenia is extremely rare and requires long-term documented stability.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Comprehensive psychiatric evaluation</li>
+          <li>Neurocognitive testing (CogScreen-AE)</li>
+          <li>No symptoms or treatment changes in ≥5 years</li>
+          <li>Independent review by FAA psychiatric consultant</li>
+        </ul>
+        ❗ Most cases will still result in deferral or denial.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⛔ Active or recent symptoms of schizophrenia are disqualifying for FAA medical certification.
+      </div>
+    `;
+  }
+}
+
+// Personality Disorders
+function evaluatePersonality() {
+  const pers = document.getElementById('personality');
+  const persInfo = document.getElementById('personality-info');
+  persInfo.innerHTML = "";
+  if (!pers.checked) return;
+
+  persInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Have you ever experienced behavior that resulted in job loss, arrest, or psychiatric hospitalization?</label>
+      <select id="personality-impact">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="personality-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('personality-impact').addEventListener('change', showPersonalityChecklist);
+}
+
+function showPersonalityChecklist(e) {
+  const div = document.getElementById('personality-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may consider certification if no history of harmful behavior or instability.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Psychiatric evaluation</li>
+          <li>Confirmation of stable social and occupational functioning</li>
+          <li>No legal or disciplinary issues on record</li>
+        </ul>
+        ⚠️ Additional FAA review likely.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Personality disorders with behavioral impairment may be disqualifying.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Comprehensive psychiatric evaluation</li>
+          <li>Incident reports or legal documentation</li>
+          <li>Evidence of sustained improvement and control</li>
+        </ul>
+        ❗ FAA decision is case-by-case and usually deferred.
+      </div>
+    `;
+  }
+}
+
+// PTSD
+function evaluatePTSD() {
+  const ptsd = document.getElementById('ptsd');
+  const ptsdInfo = document.getElementById('ptsd-info');
+  ptsdInfo.innerHTML = "";
+  if (!ptsd.checked) return;
+
+  ptsdInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧠 Are you currently experiencing flashbacks, nightmares, or panic symptoms?</label>
+      <select id="ptsd-symptoms">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="ptsd-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('ptsd-symptoms').addEventListener('change', showPTSDChecklist);
+}
+
+function showPTSDChecklist(e) {
+  const div = document.getElementById('ptsd-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may consider certification for stable PTSD without symptoms.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Psychiatric evaluation confirming remission</li>
+          <li>Functional status and work history</li>
+          <li>Medication list (if any) and treatment summary</li>
+        </ul>
+        ⚠️ FAA may still request follow-up evaluation or CogScreen.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Ongoing PTSD symptoms are typically disqualifying.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Full psychiatric evaluation</li>
+          <li>Treatment history and symptom timeline</li>
+          <li>Impact on function and response to therapy</li>
+        </ul>
+        ❗ FAA review is required and often deferred for symptomatic individuals.
+      </div>
+    `;
+  }
+}
+
+// SSRI Use (from medical history)
+function evaluateSSRIHistory() {
+  const ssri = document.getElementById('ssri-history');
+  const ssriInfo = document.getElementById('ssri-history-info');
+  ssriInfo.innerHTML = "";
+  if (!ssri.checked) return;
+
+  ssriInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>💊 Are you currently taking the SSRI, or was it in the past?</label>
+      <select id="ssri-current">
+        <option value="">-- Select --</option>
+        <option value="current">Currently using</option>
+        <option value="past">Past use only</option>
+      </select>
+      <div id="ssri-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('ssri-current').addEventListener('change', showSSRIFollowup);
+}
+
+function showSSRIFollowup(e) {
+  const value = e.target.value;
+  const div = document.getElementById('ssri-followup');
+
+  if (value === 'past') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Past SSRI use with full resolution may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Psychiatric history summary</li>
+          <li>Discontinuation timeline and reason</li>
+          <li>Confirmation of current stability (no recurrence)</li>
+        </ul>
+      </div>
+    `;
+  } else if (value === 'current') {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Current SSRI use is only allowed under strict FAA protocol (SSRI Pathway).<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>FAA-approved SSRI (e.g., Zoloft, Lexapro, Prozac, Celexa)</li>
+          <li>Detailed psychiatric evaluation</li>
+          <li>CogScreen-AE neurocognitive testing</li>
+          <li>No history of severe depression, psychosis, or bipolar disorder</li>
+          <li>Follow-up every 6 months</li>
+        </ul>
+        ❗ FAA Special Issuance required and often deferred for review.
+      </div>
+    `;
+  } else {
+    div.innerHTML = "";
+  }
+}
 
 
     
