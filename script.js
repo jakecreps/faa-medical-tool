@@ -73,6 +73,9 @@ function showStep(stepId) {
   document.getElementById('hearing')?.addEventListener('change', evaluateENTConditions);
   document.getElementById('vertigo')?.addEventListener('change', evaluateENTConditions);
   document.getElementById('sinusitis')?.addEventListener('change', evaluateENTConditions);
+  document.getElementById('asthma')?.addEventListener('change', evaluatePulmonaryConditions);
+  document.getElementById('copd')?.addEventListener('change', evaluatePulmonaryConditions);
+  document.getElementById('sleepapnea')?.addEventListener('change', evaluatePulmonaryConditions);
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -127,6 +130,13 @@ function showStep(stepId) {
     evaluateSinusitis();
   }  
 
+  function evaluatePulmonaryConditions() {
+    evaluateAsthma();
+    evaluateCOPD();
+    evaluateSleepApnea();
+  }
+  
+
   function evaluateAllConditions() {
     evaluateCardioConditions();
     evaluateNeuroConditions();
@@ -134,8 +144,8 @@ function showStep(stepId) {
     evaluateEndocrineConditions();
     evaluateVisionConditions();
     evaluateENTConditions();
+    evaluatePulmonaryConditions();
   }
-  
   
   // AFib
   function evaluateAFib() {
@@ -2001,6 +2011,162 @@ function showSinusitisChecklist(e) {
           <li>ENT or flight surgeon report on aeromedical safety</li>
           <li>Recent imaging and symptom resolution plan</li>
           <li>Surgical history or consideration (if applicable)</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Asthma
+function evaluateAsthma() {
+  const asthma = document.getElementById('asthma');
+  const asthmaInfo = document.getElementById('asthma-info');
+  asthmaInfo.innerHTML = "";
+  if (!asthma.checked) return;
+
+  asthmaInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🌬️ Is your asthma currently well-controlled without recent ER visits or steroid use?</label>
+      <select id="asthma-controlled">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="asthma-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('asthma-controlled').addEventListener('change', showAsthmaChecklist);
+}
+
+function showAsthmaChecklist(e) {
+  const div = document.getElementById('asthma-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Stable asthma is typically certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Pulmonary function tests (PFTs or spirometry)</li>
+          <li>Clinical summary from treating provider</li>
+          <li>Medication list (inhalers, steroids, etc.)</li>
+        </ul>
+        ⚠️ FAA may request periodic updates if symptoms recur.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Uncontrolled asthma or recent exacerbations will require FAA review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>ER visit records and steroid use history</li>
+          <li>Pulmonary evaluation and treatment plan</li>
+          <li>Updated spirometry or PFT results</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// COPD
+function evaluateCOPD() {
+  const copd = document.getElementById('copd');
+  const copdInfo = document.getElementById('copd-info');
+  copdInfo.innerHTML = "";
+  if (!copd.checked) return;
+
+  copdInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🫁 Have you had any recent hospitalizations or oxygen use?</label>
+      <select id="copd-severe">
+        <option value="">-- Select --</option>
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="copd-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('copd-severe').addEventListener('change', showCOPDChecklist);
+}
+
+function showCOPDChecklist(e) {
+  const div = document.getElementById('copd-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Stable COPD may be certifiable with FAA review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Recent spirometry or PFT results</li>
+          <li>Pulmonologist evaluation</li>
+          <li>Medication and oxygen usage summary</li>
+        </ul>
+        ⚠️ FAA may require retesting periodically.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ If recent hospitalizations or oxygen are required, FAA will likely defer certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Hospital discharge summary</li>
+          <li>Pulmonary assessment and treatment plan</li>
+          <li>Oxygen use history and oxygen saturation testing</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Sleep Apnea
+function evaluateSleepApnea() {
+  const sa = document.getElementById('sleepapnea');
+  const saInfo = document.getElementById('sleepapnea-info');
+  saInfo.innerHTML = "";
+  if (!sa.checked) return;
+
+  saInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>😴 Are you currently compliant with FAA-approved treatment (e.g. CPAP)?</label>
+      <select id="sleepapnea-treated">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="sleepapnea-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('sleepapnea-treated').addEventListener('change', showSleepApneaChecklist);
+}
+
+function showSleepApneaChecklist(e) {
+  const div = document.getElementById('sleepapnea-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA accepts well-managed sleep apnea with proper documentation.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Sleep study report (diagnostic and compliance data)</li>
+          <li>CPAP download (minimum 30 days showing ≥75% use with 4+ hrs/night)</li>
+          <li>Physician statement of compliance and symptom resolution</li>
+        </ul>
+        ⚠️ FAA may require annual follow-up with updated data.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⛔ Non-compliance with treatment disqualifies certification.<br><br>
+        <strong>📋 Required Before Reapplying:</strong>
+        <ul>
+          <li>Initiation or resumption of therapy (CPAP or alternative)</li>
+          <li>Documented compliance with 30+ days of usage</li>
+          <li>Updated physician review and sleep evaluation</li>
         </ul>
       </div>
     `;
