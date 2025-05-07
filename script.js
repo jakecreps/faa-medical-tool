@@ -66,6 +66,11 @@ function showStep(stepId) {
   document.getElementById('obesity')?.addEventListener('change', evaluateEndocrineConditions);
   document.getElementById('prediabetes')?.addEventListener('change', evaluateEndocrineConditions);
   document.getElementById('lowtestosterone')?.addEventListener('change', evaluateEndocrineConditions);
+  document.getElementById('glaucoma')?.addEventListener('change', evaluateVisionConditions);
+  document.getElementById('retinopathy')?.addEventListener('change', evaluateVisionConditions);
+  document.getElementById('ocular')?.addEventListener('change', evaluateVisionConditions);
+  document.getElementById('cataracts')?.addEventListener('change', evaluateVisionConditions);
+
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -107,11 +112,19 @@ function showStep(stepId) {
     evaluateLowTestosterone();
   }
 
+  function evaluateVisionConditions() {
+    evaluateGlaucoma();
+    evaluateRetinopathy();
+    evaluateOcularMotility();
+    evaluateCataracts();
+  }
+
   function evaluateAllConditions() {
     evaluateCardioConditions();
     evaluateNeuroConditions();
     evaluatePsychConditions();
     evaluateEndocrineConditions();
+    evaluateVisionConditions();
   }
   
   
@@ -1620,6 +1633,211 @@ function showLowTestosteroneChecklist(e) {
         <ul>
           <li>Baseline testosterone lab (optional)</li>
           <li>Physician statement confirming no symptoms</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Glaucoma
+function evaluateGlaucoma() {
+  const gl = document.getElementById('glaucoma');
+  const glInfo = document.getElementById('glaucoma-info');
+  glInfo.innerHTML = "";
+  if (!gl.checked) return;
+
+  glInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>👁️ Is your intraocular pressure (IOP) controlled and vision stable with treatment?</label>
+      <select id="glaucoma-controlled">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="glaucoma-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('glaucoma-controlled').addEventListener('change', showGlaucomaChecklist);
+}
+
+function showGlaucomaChecklist(e) {
+  const div = document.getElementById('glaucoma-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may certify pilots with stable glaucoma.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Ophthalmologist evaluation</li>
+          <li>Visual field testing results</li>
+          <li>Intraocular pressure (IOP) records</li>
+          <li>Medication or surgical treatment summary</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Uncontrolled glaucoma is disqualifying until stabilized.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Recent ophthalmologic exam</li>
+          <li>IOP readings and treatment plan</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Retinopathy
+function evaluateRetinopathy() {
+  const ret = document.getElementById('retinopathy');
+  const retInfo = document.getElementById('retinopathy-info');
+  retInfo.innerHTML = "";
+  if (!ret.checked) return;
+
+  retInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🩸 Has your vision or visual field been affected by the retinopathy?</label>
+      <select id="retinopathy-impact">
+        <option value="">-- Select --</option>
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="retinopathy-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('retinopathy-impact').addEventListener('change', showRetinopathyChecklist);
+}
+
+function showRetinopathyChecklist(e) {
+  const div = document.getElementById('retinopathy-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may certify if visual acuity and fields are unaffected.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Ophthalmologist evaluation</li>
+          <li>Visual acuity and field testing</li>
+          <li>Fundus photos or retinal imaging</li>
+          <li>Cause and stability of retinopathy</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Vision-impairing retinopathy requires FAA review and is often disqualifying.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Detailed eye exam including field and acuity tests</li>
+          <li>Ophthalmologist opinion on flight safety</li>
+          <li>Diabetic status (if applicable)</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Ocular Motility Disorder
+function evaluateOcularMotility() {
+  const ocular = document.getElementById('ocular');
+  const ocularInfo = document.getElementById('ocular-info');
+  ocularInfo.innerHTML = "";
+  if (!ocular.checked) return;
+
+  ocularInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>👁️ Are you experiencing double vision, impaired depth perception, or uncontrolled eye movement?</label>
+      <select id="ocular-symptoms">
+        <option value="">-- Select --</option>
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="ocular-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('ocular-symptoms').addEventListener('change', showOcularChecklist);
+}
+
+function showOcularChecklist(e) {
+  const div = document.getElementById('ocular-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may certify if ocular motility issues do not impair vision or coordination.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Ophthalmologist or optometrist evaluation</li>
+          <li>Binocular vision and depth perception test</li>
+          <li>Confirmation of no diplopia (double vision)</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active diplopia or uncontrolled eye movement is disqualifying until resolved.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Eye exam detailing impact on visual function</li>
+          <li>Specialist recommendation regarding aviation safety</li>
+          <li>Treatment or corrective plan (e.g. prism lenses, surgery)</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Cataracts / Lens Replacement
+function evaluateCataracts() {
+  const cataracts = document.getElementById('cataracts');
+  const cataractsInfo = document.getElementById('cataracts-info');
+  cataractsInfo.innerHTML = "";
+  if (!cataracts.checked) return;
+
+  cataractsInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>👁️ Has your vision been fully restored following surgery or lens replacement?</label>
+      <select id="cataracts-corrected">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="cataracts-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('cataracts-corrected').addEventListener('change', showCataractsChecklist);
+}
+
+function showCataractsChecklist(e) {
+  const div = document.getElementById('cataracts-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may certify post-surgical vision if standards are met.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Post-op visual acuity and field results</li>
+          <li>Ophthalmologist summary stating vision correction is successful</li>
+          <li>Implanted lens type (if applicable)</li>
+        </ul>
+        ⚠️ Multifocal lenses may require additional review.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ FAA will not issue a certificate until vision is corrected to required standards.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Updated ophthalmologic assessment</li>
+          <li>Planned or pending treatment (e.g., surgery)</li>
         </ul>
       </div>
     `;
