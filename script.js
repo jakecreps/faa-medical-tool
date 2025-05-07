@@ -86,6 +86,10 @@ function showStep(stepId) {
   document.getElementById('prostatecancer')?.addEventListener('change', evaluateOncologicConditions);
   document.getElementById('renalcancer')?.addEventListener('change', evaluateOncologicConditions);
   document.getElementById('testicularcancer')?.addEventListener('change', evaluateOncologicConditions);
+  document.getElementById('colitis')?.addEventListener('change', evaluateGiGuConditions);
+  document.getElementById('hepatitis')?.addEventListener('change', evaluateGiGuConditions);
+  document.getElementById('renalcalculi')?.addEventListener('change', evaluateGiGuConditions);
+  document.getElementById('genitourinarytumors')?.addEventListener('change', evaluateGiGuConditions);
 
 
   function evaluateCardioConditions() {
@@ -163,6 +167,14 @@ function showStep(stepId) {
     evaluateTesticularCancer();
   }
 
+  function evaluateGiGuConditions() {
+    evaluateColitis();
+    evaluateHepatitis();
+    evaluateRenalCalculi();
+    evaluateGenitourinaryTumors();
+  }
+  
+
   function evaluateAllConditions() {
     evaluateCardioConditions();
     evaluateNeuroConditions();
@@ -173,6 +185,7 @@ function showStep(stepId) {
     evaluatePulmonaryConditions();
     evaluateHematologicConditions();
     evaluateOncologicConditions();
+    evaluateGiGuConditions();
   }
   
   // AFib
@@ -2718,6 +2731,217 @@ function showTesticularCancerChecklist(e) {
           <li>Treatment plan and estimated duration</li>
           <li>Functional and lab evaluations</li>
           <li>FAA may require waiting period post-therapy</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Colitis (IBD, Crohn’s)
+function evaluateColitis() {
+  const colitis = document.getElementById('colitis');
+  const colitisInfo = document.getElementById('colitis-info');
+  colitisInfo.innerHTML = "";
+  if (!colitis.checked) return;
+
+  colitisInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🦠 Is your condition currently well-controlled without severe flare-ups?</label>
+      <select id="colitis-controlled">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="colitis-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('colitis-controlled').addEventListener('change', showColitisChecklist);
+}
+
+function showColitisChecklist(e) {
+  const div = document.getElementById('colitis-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may approve if condition is stable and does not impair flight safety.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Gastroenterologist note confirming control and stability</li>
+          <li>Colonoscopy or imaging summary (if recent)</li>
+          <li>Medication list and absence of disqualifying side effects</li>
+          <li>Functional assessment: no dehydration, anemia, or urgency</li>
+        </ul>
+        ⚠️ FAA may request periodic updates depending on disease severity.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active disease or frequent flares defer certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Full GI evaluation and treatment plan</li>
+          <li>Assessment of medications (e.g. steroids, immunosuppressants)</li>
+          <li>Expected stability timeline and recent labs</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Hepatitis
+function evaluateHepatitis() {
+  const hep = document.getElementById('hepatitis');
+  const hepInfo = document.getElementById('hepatitis-info');
+  hepInfo.innerHTML = "";
+  if (!hep.checked) return;
+
+  hepInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧪 Is your hepatitis inactive or well-controlled with normal liver function?</label>
+      <select id="hep-status">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="hep-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('hep-status').addEventListener('change', showHepatitisChecklist);
+}
+
+function showHepatitisChecklist(e) {
+  const div = document.getElementById('hep-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Stable hepatitis with normal function may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Hepatologist or physician note on control and stability</li>
+          <li>Liver function tests (ALT, AST, bilirubin)</li>
+          <li>Viral load (if applicable)</li>
+          <li>Medications used and side effect profile</li>
+        </ul>
+        ⚠️ FAA may request regular lab follow-up.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active hepatitis or abnormal liver function defers certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Complete treatment plan from hepatologist</li>
+          <li>Recent labs and imaging (e.g., FibroScan, ultrasound)</li>
+          <li>Assessment of symptoms or complications (e.g., encephalopathy, fatigue)</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Renal Calculi (Kidney Stones)
+function evaluateRenalCalculi() {
+  const rc = document.getElementById('renalcalculi');
+  const rcInfo = document.getElementById('renalcalculi-info');
+  rcInfo.innerHTML = "";
+  if (!rc.checked) return;
+
+  rcInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🪨 Have you had a stone episode within the past 2 years?</label>
+      <select id="stone-recent">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="stone-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('stone-recent').addEventListener('change', showRenalCalculiChecklist);
+}
+
+function showRenalCalculiChecklist(e) {
+  const div = document.getElementById('stone-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ No recent episodes — may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Urologist or physician note confirming history</li>
+          <li>Imaging (CT, ultrasound) showing no active stones</li>
+          <li>Metabolic work-up results (if performed)</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Recent or active stones require FAA review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Details of most recent stone episode</li>
+          <li>Stone analysis (if available)</li>
+          <li>Imaging to confirm resolution or ongoing risk</li>
+        </ul>
+        ⏳ Pilots may be deferred during acute risk periods.
+      </div>
+    `;
+  }
+}
+
+// Genitourinary Tumors
+function evaluateGenitourinaryTumors() {
+  const gu = document.getElementById('genitourinarytumors');
+  const guInfo = document.getElementById('genitourinarytumors-info');
+  guInfo.innerHTML = "";
+  if (!gu.checked) return;
+
+  guInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧬 Has the tumor been treated and confirmed in remission?</label>
+      <select id="gu-remission">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="gu-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('gu-remission').addEventListener('change', showGenitourinaryTumorChecklist);
+}
+
+function showGenitourinaryTumorChecklist(e) {
+  const div = document.getElementById('gu-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Remission and stability may allow FAA certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Urologist or oncologist statement confirming remission</li>
+          <li>Imaging or follow-up reports confirming stability</li>
+          <li>Treatment summary (surgery, radiation, chemo)</li>
+          <li>Functional status (urinary, sexual, renal as applicable)</li>
+        </ul>
+        ⚠️ FAA may require periodic status updates depending on type and history.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active tumors defer FAA certification until treatment is completed and remission is documented.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current treatment plan</li>
+          <li>Imaging/lab results showing disease status</li>
+          <li>Urologic or oncologic assessment of fitness to fly</li>
         </ul>
       </div>
     `;
