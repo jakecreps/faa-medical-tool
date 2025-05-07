@@ -70,7 +70,9 @@ function showStep(stepId) {
   document.getElementById('retinopathy')?.addEventListener('change', evaluateVisionConditions);
   document.getElementById('ocular')?.addEventListener('change', evaluateVisionConditions);
   document.getElementById('cataracts')?.addEventListener('change', evaluateVisionConditions);
-
+  document.getElementById('hearing')?.addEventListener('change', evaluateENTConditions);
+  document.getElementById('vertigo')?.addEventListener('change', evaluateENTConditions);
+  document.getElementById('sinusitis')?.addEventListener('change', evaluateENTConditions);
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -119,12 +121,19 @@ function showStep(stepId) {
     evaluateCataracts();
   }
 
+  function evaluateENTConditions() {
+    evaluateHearingLoss();
+    evaluateVertigo();
+    evaluateSinusitis();
+  }  
+
   function evaluateAllConditions() {
     evaluateCardioConditions();
     evaluateNeuroConditions();
     evaluatePsychConditions();
     evaluateEndocrineConditions();
     evaluateVisionConditions();
+    evaluateENTConditions();
   }
   
   
@@ -1838,6 +1847,160 @@ function showCataractsChecklist(e) {
         <ul>
           <li>Updated ophthalmologic assessment</li>
           <li>Planned or pending treatment (e.g., surgery)</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Hearing Loss
+function evaluateHearingLoss() {
+  const hearing = document.getElementById('hearing');
+  const hearingInfo = document.getElementById('hearing-info');
+  hearingInfo.innerHTML = "";
+  if (!hearing.checked) return;
+
+  hearingInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🎧 Can you pass a conversational voice test or FAA-approved audiometry?</label>
+      <select id="hearing-pass">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="hearing-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('hearing-pass').addEventListener('change', showHearingChecklist);
+}
+
+function showHearingChecklist(e) {
+  const div = document.getElementById('hearing-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Hearing is acceptable if FAA criteria are met with or without aids.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Hearing test results (voice test or audiogram)</li>
+          <li>Use of hearing aids (if applicable)</li>
+          <li>Medical statement from ENT or audiologist</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ If you cannot pass hearing tests, certification is not allowed until corrected.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Formal audiometric testing results</li>
+          <li>Evaluation of whether aids restore hearing to required thresholds</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Vertigo / Meniere’s
+function evaluateVertigo() {
+  const vert = document.getElementById('vertigo');
+  const vertInfo = document.getElementById('vertigo-info');
+  vertInfo.innerHTML = "";
+  if (!vert.checked) return;
+
+  vertInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🌀 Have you had any episodes of vertigo or imbalance in the past 6 months?</label>
+      <select id="vertigo-recent">
+        <option value="">-- Select --</option>
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="vertigo-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('vertigo-recent').addEventListener('change', showVertigoChecklist);
+}
+
+function showVertigoChecklist(e) {
+  const div = document.getElementById('vertigo-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ If asymptomatic for 6+ months, FAA may consider certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>ENT or neurologist evaluation</li>
+          <li>Vertigo history summary</li>
+          <li>Balance testing (ENG/VNG if available)</li>
+          <li>Clearance of spatial disorientation risk</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ FAA will defer certification if symptoms persist or pose flight risk.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current ENT/neurologist report</li>
+          <li>Testing results (e.g. ENG, MRI if done)</li>
+          <li>Treatment plan and follow-up schedule</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Chronic Sinusitis
+function evaluateSinusitis() {
+  const sinus = document.getElementById('sinusitis');
+  const sinusInfo = document.getElementById('sinusitis-info');
+  sinusInfo.innerHTML = "";
+  if (!sinus.checked) return;
+
+  sinusInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🌫️ Have your symptoms caused in-flight barotrauma, blockage, or incapacitation?</label>
+      <select id="sinus-severe">
+        <option value="">-- Select --</option>
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="sinusitis-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('sinus-severe').addEventListener('change', showSinusitisChecklist);
+}
+
+function showSinusitisChecklist(e) {
+  const div = document.getElementById('sinusitis-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Chronic sinusitis may be certifiable if symptoms are mild and controlled.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>ENT evaluation</li>
+          <li>History of frequency and severity</li>
+          <li>Medication list (e.g., antihistamines, sprays)</li>
+          <li>CT or sinus imaging if available</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ If symptoms impair flight performance, FAA will require thorough review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>ENT or flight surgeon report on aeromedical safety</li>
+          <li>Recent imaging and symptom resolution plan</li>
+          <li>Surgical history or consideration (if applicable)</li>
         </ul>
       </div>
     `;
