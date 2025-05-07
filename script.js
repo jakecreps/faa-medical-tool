@@ -90,7 +90,13 @@ function showStep(stepId) {
   document.getElementById('hepatitis')?.addEventListener('change', evaluateGiGuConditions);
   document.getElementById('renalcalculi')?.addEventListener('change', evaluateGiGuConditions);
   document.getElementById('genitourinarytumors')?.addEventListener('change', evaluateGiGuConditions);
-
+  document.getElementById('arthritis')?.addEventListener('change', evaluateMusculoskeletalConditions);
+  document.getElementById('mskinjuries')?.addEventListener('change', evaluateMusculoskeletalConditions);
+  document.getElementById('spinal')?.addEventListener('change', evaluateMusculoskeletalConditions);
+  document.getElementById('psoriasis')?.addEventListener('change', evaluateDermatologicConditions);
+  document.getElementById('alcohol')?.addEventListener('change', evaluateSubstanceUseConditions);
+  document.getElementById('druguse')?.addEventListener('change', evaluateSubstanceUseConditions);
+  document.getElementById('hims')?.addEventListener('change', evaluateSubstanceUseConditions);
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -173,8 +179,23 @@ function showStep(stepId) {
     evaluateRenalCalculi();
     evaluateGenitourinaryTumors();
   }
-  
 
+  function evaluateMusculoskeletalConditions() {
+    evaluateArthritis();
+    evaluateMusculoskeletalInjuries();
+    evaluateSpinalDisorders(); 
+  }  
+
+  function evaluateDermatologicConditions() {
+    evaluatePsoriasis();
+  }
+  
+  function evaluateSubstanceUseConditions() {
+    evaluateAlcoholDependence();
+    evaluateDrugUse();
+    evaluateHIMS();
+  }  
+  
   function evaluateAllConditions() {
     evaluateCardioConditions();
     evaluateNeuroConditions();
@@ -186,6 +207,9 @@ function showStep(stepId) {
     evaluateHematologicConditions();
     evaluateOncologicConditions();
     evaluateGiGuConditions();
+    evaluateMusculoskeletalConditions();
+    evaluateDermatologicConditions();
+    evaluateSubstanceUseConditions();
   }
   
   // AFib
@@ -2942,6 +2966,372 @@ function showGenitourinaryTumorChecklist(e) {
           <li>Current treatment plan</li>
           <li>Imaging/lab results showing disease status</li>
           <li>Urologic or oncologic assessment of fitness to fly</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Arthritis (RA, OA)
+function evaluateArthritis() {
+  const arthritis = document.getElementById('arthritis');
+  const arthritisInfo = document.getElementById('arthritis-info');
+  arthritisInfo.innerHTML = "";
+  if (!arthritis.checked) return;
+
+  arthritisInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🦴 Does your arthritis cause functional impairment that affects flight controls?</label>
+      <select id="arthritis-functional">
+        <option value="">-- Select --</option>
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="arthritis-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('arthritis-functional').addEventListener('change', showArthritisChecklist);
+}
+
+function showArthritisChecklist(e) {
+  const div = document.getElementById('arthritis-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Mild or stable arthritis may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Rheumatologist or physician note describing extent and location of arthritis</li>
+          <li>Confirmation of no impact on fine or gross motor control</li>
+          <li>Medication list (especially if on immunosuppressants or biologics)</li>
+        </ul>
+        ⚠️ FAA may request periodic updates if condition is progressive.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Functional impairment may defer certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Detailed musculoskeletal exam and range of motion assessment</li>
+          <li>Functional fitness assessment related to cockpit duties</li>
+          <li>Treatment and medication summary</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Musculoskeletal Injuries
+function evaluateMusculoskeletalInjuries() {
+  const msk = document.getElementById('mskinjuries');
+  const mskInfo = document.getElementById('mskinjuries-info');
+  mskInfo.innerHTML = "";
+  if (!msk.checked) return;
+
+  mskInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🩼 Has the injury fully healed without ongoing pain or mobility issues?</label>
+      <select id="msk-healed">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="msk-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('msk-healed').addEventListener('change', showMusculoskeletalInjuryChecklist);
+}
+
+function showMusculoskeletalInjuryChecklist(e) {
+  const div = document.getElementById('msk-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Healed injuries that do not impair function may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Orthopedic or physician note confirming full recovery</li>
+          <li>Details of injury and any residual hardware (e.g. screws, plates)</li>
+          <li>Confirmation of full range of motion and ability to operate flight controls</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ FAA may defer certification if the injury impairs safety-critical movements.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current status report from treating physician or physical therapist</li>
+          <li>Functional limitations assessment</li>
+          <li>Treatment plan and expected recovery timeline</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Spinal Disorders
+function evaluateSpinalDisorders() {
+  const spinal = document.getElementById('spinal');
+  const spinalInfo = document.getElementById('spinal-info');
+  spinalInfo.innerHTML = "";
+  if (!spinal.checked) return;
+
+  spinalInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧍‍♂️ Does your spinal condition impair movement or cause neurological symptoms?</label>
+      <select id="spinal-functional">
+        <option value="">-- Select --</option>
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+      <div id="spinal-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('spinal-functional').addEventListener('change', showSpinalDisorderChecklist);
+}
+
+function showSpinalDisorderChecklist(e) {
+  const div = document.getElementById('spinal-followup');
+  if (e.target.value === 'no') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Stable spinal conditions without impairment may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Orthopedic or neurosurgical evaluation</li>
+          <li>Recent imaging (MRI/CT) if applicable</li>
+          <li>Confirmation of full range of motion and motor function</li>
+        </ul>
+        ⚠️ FAA may request periodic updates if the condition is degenerative.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Impairing spinal disorders may delay or defer certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Neurological assessment (sensory/motor reflexes)</li>
+          <li>Imaging reports</li>
+          <li>Treatment summary and recovery timeline (if surgical)</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Psoriasis (systemic)
+function evaluatePsoriasis() {
+  const ps = document.getElementById('psoriasis');
+  const psInfo = document.getElementById('psoriasis-info');
+  psInfo.innerHTML = "";
+  if (!ps.checked) return;
+
+  psInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧴 Is your psoriasis stable and not affecting cognitive or physical performance?</label>
+      <select id="psoriasis-status">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="psoriasis-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('psoriasis-status').addEventListener('change', showPsoriasisChecklist);
+}
+
+function showPsoriasisChecklist(e) {
+  const div = document.getElementById('psoriasis-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Controlled systemic psoriasis may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Dermatologist note confirming disease stability</li>
+          <li>Medication list with side effect profile</li>
+          <li>Evidence of no systemic involvement (e.g., arthritis)</li>
+        </ul>
+        ⚠️ FAA may request follow-up if condition flares.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active or severe systemic psoriasis requires FAA review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Dermatologist evaluation</li>
+          <li>Functional impact assessment</li>
+          <li>Treatment plan (especially if immunosuppressants used)</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Alcohol Dependence / Abuse
+function evaluateAlcoholDependence() {
+  const alcohol = document.getElementById('alcohol');
+  const alcoholInfo = document.getElementById('alcohol-info');
+  alcoholInfo.innerHTML = "";
+  if (!alcohol.checked) return;
+
+  alcoholInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🍺 Have you completed treatment and maintained sobriety for at least 2 years?</label>
+      <select id="alcohol-sober">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="alcohol-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('alcohol-sober').addEventListener('change', showAlcoholChecklist);
+}
+
+function showAlcoholChecklist(e) {
+  const div = document.getElementById('alcohol-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ May be eligible for FAA review under HIMS protocol.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Substance abuse counselor and psychiatrist evaluations</li>
+          <li>Proof of sobriety (random tests, sponsor statements)</li>
+          <li>HIMS AME involvement and tracking</li>
+          <li>12-step meeting attendance or similar recovery plan</li>
+        </ul>
+        ⚠️ Certification typically requires Special Issuance.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⛔ Certification not possible until sustained recovery is demonstrated.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Treatment program summary (inpatient/outpatient)</li>
+          <li>Current abstinence efforts and monitoring</li>
+          <li>HIMS AME consultation for recovery plan</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Drug Use
+function evaluateDrugUse() {
+  const drug = document.getElementById('druguse');
+  const drugInfo = document.getElementById('druguse-info');
+  drugInfo.innerHTML = "";
+  if (!drug.checked) return;
+
+  drugInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>💊 Have you completed rehabilitation and remained drug-free for at least 2 years?</label>
+      <select id="drug-sober">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="drug-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('drug-sober').addEventListener('change', showDrugChecklist);
+}
+
+function showDrugChecklist(e) {
+  const div = document.getElementById('drug-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ May qualify for Special Issuance under HIMS if stability is demonstrated.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Substance abuse treatment summary and discharge notes</li>
+          <li>Random drug testing results</li>
+          <li>Psychiatric and addiction specialist evaluations</li>
+          <li>HIMS AME monitoring and sponsor feedback (if applicable)</li>
+        </ul>
+        ⚠️ FAA closely monitors all drug-related certifications.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⛔ FAA will not consider certification until rehabilitation is complete and long-term sobriety is established.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Treatment plan and participation proof</li>
+          <li>Drug test history</li>
+          <li>Psychiatric evaluation of dependency status</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// HIMS Monitoring
+function evaluateHIMS() {
+  const hims = document.getElementById('hims');
+  const himsInfo = document.getElementById('hims-info');
+  himsInfo.innerHTML = "";
+  if (!hims.checked) return;
+
+  himsInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🛠️ Are you currently enrolled in a HIMS program with an FAA-authorized AME?</label>
+      <select id="hims-enrolled">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="hims-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('hims-enrolled').addEventListener('change', showHIMSChecklist);
+}
+
+function showHIMSChecklist(e) {
+  const div = document.getElementById('hims-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA Special Issuance may proceed with continued HIMS participation.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>HIMS AME reports and recommendations</li>
+          <li>Random drug/alcohol test logs</li>
+          <li>Peer support group attendance (e.g., AA, NA)</li>
+          <li>Ongoing psychiatrist and counselor reports</li>
+        </ul>
+        ⚠️ FAA requires long-term monitoring for continued certification.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Enrollment in a HIMS program is required for FAA review in applicable cases.<br><br>
+        <strong>📋 Required Next Steps:</strong>
+        <ul>
+          <li>Contact a HIMS-authorized AME</li>
+          <li>Enroll in an FAA-compliant monitoring program</li>
+          <li>Establish treatment, documentation, and support plan</li>
         </ul>
       </div>
     `;
