@@ -76,6 +76,9 @@ function showStep(stepId) {
   document.getElementById('asthma')?.addEventListener('change', evaluatePulmonaryConditions);
   document.getElementById('copd')?.addEventListener('change', evaluatePulmonaryConditions);
   document.getElementById('sleepapnea')?.addEventListener('change', evaluatePulmonaryConditions);
+  document.getElementById('thrombocytopenia')?.addEventListener('change', evaluateHematologicConditions);
+  document.getElementById('anemia')?.addEventListener('change', evaluateHematologicConditions);
+  document.getElementById('lymphoma')?.addEventListener('change', evaluateHematologicConditions);
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -135,7 +138,12 @@ function showStep(stepId) {
     evaluateCOPD();
     evaluateSleepApnea();
   }
-  
+
+  function evaluateHematologicConditions() {
+    evaluateThrombocytopenia();
+    evaluateAnemia();
+    evaluateLymphoma();
+  }
 
   function evaluateAllConditions() {
     evaluateCardioConditions();
@@ -145,6 +153,7 @@ function showStep(stepId) {
     evaluateVisionConditions();
     evaluateENTConditions();
     evaluatePulmonaryConditions();
+    evaluateHematologicConditions();
   }
   
   // AFib
@@ -2167,6 +2176,161 @@ function showSleepApneaChecklist(e) {
           <li>Initiation or resumption of therapy (CPAP or alternative)</li>
           <li>Documented compliance with 30+ days of usage</li>
           <li>Updated physician review and sleep evaluation</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Thrombocytopenia
+function evaluateThrombocytopenia() {
+  const tp = document.getElementById('thrombocytopenia');
+  const tpInfo = document.getElementById('thrombocytopenia-info');
+  tpInfo.innerHTML = "";
+  if (!tp.checked) return;
+
+  tpInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🩸 Is your platelet count consistently above 100,000 and stable?</label>
+      <select id="tp-count">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="tp-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('tp-count').addEventListener('change', showThrombocytopeniaChecklist);
+}
+
+function showThrombocytopeniaChecklist(e) {
+  const div = document.getElementById('tp-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Stable thrombocytopenia above 100,000 may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Complete blood count (CBC)</li>
+          <li>Hematologist evaluation</li>
+          <li>Underlying diagnosis and prognosis</li>
+          <li>Statement of absence of bleeding symptoms</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Platelets under 100,000 or active bleeding risks require FAA deferral.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Full hematologic workup and platelet trend</li>
+          <li>Treatment plan and clinical notes</li>
+          <li>Justification for aviation safety clearance</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Anemia (significant)
+function evaluateAnemia() {
+  const anemia = document.getElementById('anemia');
+  const anemiaInfo = document.getElementById('anemia-info');
+  anemiaInfo.innerHTML = "";
+  if (!anemia.checked) return;
+
+  anemiaInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧪 Is your hemoglobin level ≥11 g/dL and condition stable?</label>
+      <select id="anemia-stable">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="anemia-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('anemia-stable').addEventListener('change', showAnemiaChecklist);
+}
+
+function showAnemiaChecklist(e) {
+  const div = document.getElementById('anemia-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may approve if anemia is mild, stable, and not symptomatic.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Recent CBC and hemoglobin/hematocrit values</li>
+          <li>Physician statement on cause and treatment</li>
+          <li>Confirmation of no fatigue or cognitive impairment</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Symptomatic or severe anemia will result in FAA deferral.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Hematologic workup including iron/B12/folate labs</li>
+          <li>Treatment plan and prognosis</li>
+          <li>Functional impact assessment</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Lymphoma / Hodgkin’s Disease
+function evaluateLymphoma() {
+  const lymph = document.getElementById('lymphoma');
+  const lymphInfo = document.getElementById('lymphoma-info');
+  lymphInfo.innerHTML = "";
+  if (!lymph.checked) return;
+
+  lymphInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧬 Have you completed treatment and are currently in remission?</label>
+      <select id="lymphoma-remission">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="lymphoma-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('lymphoma-remission').addEventListener('change', showLymphomaChecklist);
+}
+
+function showLymphomaChecklist(e) {
+  const div = document.getElementById('lymphoma-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ If in remission with no impairing side effects, FAA may approve certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Oncologist report confirming remission</li>
+          <li>Treatment summary and end date</li>
+          <li>Any follow-up imaging (CT/PET)</li>
+          <li>Cognitive and physical function clearance</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active treatment or uncontrolled disease defers certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current treatment plan from oncologist</li>
+          <li>Progress updates and side effect summary</li>
+          <li>Expected timeline for stabilization or remission</li>
         </ul>
       </div>
     `;
