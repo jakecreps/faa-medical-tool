@@ -14,6 +14,7 @@ function showStep(stepId) {
     document.getElementById('summaryName').innerText = document.getElementById('pilotName').value || 'Not provided';
     document.getElementById('summaryHours').innerText = document.getElementById('flightHours').value || 'Not provided';
     document.getElementById('summaryCert').innerText = document.getElementById('certClass').value + ' Class';
+    document.getElementById('lowtestosterone')?.addEventListener('change', evaluateEndocrineConditions);
   }
   
   // Medications
@@ -59,6 +60,12 @@ function showStep(stepId) {
   document.getElementById('personality')?.addEventListener('change', evaluatePsychConditions);
   document.getElementById('ptsd')?.addEventListener('change', evaluatePsychConditions);
   document.getElementById('ssri-history')?.addEventListener('change', evaluatePsychConditions);
+  document.getElementById('diabetes')?.addEventListener('change', evaluateEndocrineConditions);
+  document.getElementById('hypothyroidism')?.addEventListener('change', evaluateEndocrineConditions);
+  document.getElementById('hyperthyroidism')?.addEventListener('change', evaluateEndocrineConditions);
+  document.getElementById('obesity')?.addEventListener('change', evaluateEndocrineConditions);
+  document.getElementById('prediabetes')?.addEventListener('change', evaluateEndocrineConditions);
+  document.getElementById('lowtestosterone')?.addEventListener('change', evaluateEndocrineConditions);
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -91,10 +98,20 @@ function showStep(stepId) {
     evaluateSSRIHistory();
   }  
 
+  function evaluateEndocrineConditions() {
+    evaluateDiabetes();
+    evaluateHypothyroidism();
+    evaluateHyperthyroidism();
+    evaluateObesity(); 
+    evaluatePrediabetes();
+    evaluateLowTestosterone();
+  }
+
   function evaluateAllConditions() {
     evaluateCardioConditions();
     evaluateNeuroConditions();
     evaluatePsychConditions();
+    evaluateEndocrineConditions();
   }
   
   
@@ -1299,5 +1316,312 @@ function showSSRIFollowup(e) {
   }
 }
 
+// Diabetes Mellitus
+function evaluateDiabetes() {
+  const diabetes = document.getElementById('diabetes');
+  const diabetesInfo = document.getElementById('diabetes-info');
+  diabetesInfo.innerHTML = "";
+  if (!diabetes.checked) return;
 
-    
+  diabetesInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>💉 Are you insulin-dependent?</label>
+      <select id="diabetes-insulin">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="diabetes-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('diabetes-insulin').addEventListener('change', showDiabetesChecklist);
+}
+
+function showDiabetesChecklist(e) {
+  const div = document.getElementById('diabetes-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Insulin-treated diabetes is permitted only under the FAA's ITDM protocol.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Detailed endocrinologist evaluation</li>
+          <li>12 months of CGM (continuous glucose monitoring) data</li>
+          <li>Flight Risk Assessment completed by AME</li>
+          <li>Compliance history and A1c trends</li>
+        </ul>
+        ❗ FAA Special Issuance required and reviewed annually.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Non-insulin-treated diabetes may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Hemoglobin A1c (within 90 days)</li>
+          <li>Treating physician statement of control</li>
+          <li>List of medications and lifestyle management details</li>
+        </ul>
+        ⚠️ FAA may request periodic labs and follow-up reports.
+      </div>
+    `;
+  }
+}
+
+// Hypothyroidism
+function evaluateHypothyroidism() {
+  const hypo = document.getElementById('hypothyroidism');
+  const hypoInfo = document.getElementById('hypothyroidism-info');
+  hypoInfo.innerHTML = "";
+  if (!hypo.checked) return;
+
+  hypoInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧪 Is your thyroid hormone level currently stable with treatment?</label>
+      <select id="hypo-stable">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="hypothyroidism-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('hypo-stable').addEventListener('change', showHypothyroidismChecklist);
+}
+
+function showHypothyroidismChecklist(e) {
+  const div = document.getElementById('hypothyroidism-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Controlled hypothyroidism is typically certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Most recent TSH and Free T4 labs</li>
+          <li>Statement from treating provider confirming stability</li>
+          <li>Medication and dosage details</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Unstable thyroid levels must be corrected before FAA review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Updated labs showing normalized thyroid levels</li>
+          <li>Follow-up visit summary with treatment adjustments</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Hyperthyroidism
+function evaluateHyperthyroidism() {
+  const hyper = document.getElementById('hyperthyroidism');
+  const hyperInfo = document.getElementById('hyperthyroidism-info');
+  hyperInfo.innerHTML = "";
+  if (!hyper.checked) return;
+
+  hyperInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🩺 Are your symptoms and thyroid hormone levels currently under control?</label>
+      <select id="hyperthyroid-controlled">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="hyperthyroidism-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('hyperthyroid-controlled').addEventListener('change', showHyperthyroidismChecklist);
+}
+
+function showHyperthyroidismChecklist(e) {
+  const div = document.getElementById('hyperthyroidism-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Controlled hyperthyroidism may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Recent TSH, Free T4, and T3 labs</li>
+          <li>Statement from your physician confirming clinical control</li>
+          <li>Details of medications or radioactive iodine treatment (if applicable)</li>
+        </ul>
+        ⚠️ FAA may request follow-up labs periodically.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ FAA will defer certification until thyroid levels are stabilized.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Recent abnormal thyroid panel</li>
+          <li>Treatment plan and timeline for control</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+// Obesity (treated)
+function evaluateObesity() {
+  const obesity = document.getElementById('obesity');
+  const obesityInfo = document.getElementById('obesity-info');
+  obesityInfo.innerHTML = "";
+  if (!obesity.checked) return;
+
+  obesityInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>⚖️ Have you experienced weight loss and control through treatment or lifestyle changes?</label>
+      <select id="obesity-treated">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="obesity-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('obesity-treated').addEventListener('change', showObesityChecklist);
+}
+
+function showObesityChecklist(e) {
+  const div = document.getElementById('obesity-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Treated obesity may be certifiable when well managed.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Recent BMI or weight documentation</li>
+          <li>Treating physician's note on clinical status and weight loss</li>
+          <li>Confirmation of no uncontrolled comorbidities (e.g., diabetes, sleep apnea)</li>
+        </ul>
+        ⚠️ FAA may still evaluate risk based on associated conditions.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Obesity without treatment or associated control may trigger FAA review.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Evaluation by treating physician</li>
+          <li>Screening for comorbidities (labs, sleep study, etc.)</li>
+          <li>Plan for weight management</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Prediabetes
+function evaluatePrediabetes() {
+  const pre = document.getElementById('prediabetes');
+  const preInfo = document.getElementById('prediabetes-info');
+  preInfo.innerHTML = "";
+  if (!pre.checked) return;
+
+  preInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧪 Was your most recent Hemoglobin A1c below 6.5%?</label>
+      <select id="a1c-below">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="prediabetes-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('a1c-below').addEventListener('change', showPrediabetesChecklist);
+}
+
+function showPrediabetesChecklist(e) {
+  const div = document.getElementById('prediabetes-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Prediabetes with stable A1c is certifiable with monitoring.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Recent Hemoglobin A1c result (within 90 days)</li>
+          <li>Statement from treating provider confirming lifestyle management or metformin use</li>
+          <li>No evidence of progression to diabetes</li>
+        </ul>
+        ⚠️ FAA may request ongoing monitoring depending on risk profile.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ A1c ≥ 6.5% indicates possible diabetes. Further review required.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Repeat A1c or fasting glucose</li>
+          <li>Consultation with provider on diagnostic criteria</li>
+          <li>Management plan (if diabetes confirmed)</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Low Testosterone
+function evaluateLowTestosterone() {
+  const lt = document.getElementById('lowtestosterone');
+  const ltInfo = document.getElementById('lowtestosterone-info');
+  ltInfo.innerHTML = "";
+  if (!lt.checked) return;
+
+  ltInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>💉 Are you currently receiving testosterone replacement therapy (TRT)?</label>
+      <select id="trt-status">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="lowtestosterone-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('trt-status').addEventListener('change', showLowTestosteroneChecklist);
+}
+
+function showLowTestosteroneChecklist(e) {
+  const div = document.getElementById('lowtestosterone-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ TRT is typically allowed if stable and monitored.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Endocrinologist or primary care evaluation</li>
+          <li>Recent testosterone level (total and free)</li>
+          <li>Dosing schedule and medication type</li>
+          <li>No side effects impacting mood, BP, or cognition</li>
+        </ul>
+        ⚠️ FAA may request re-evaluation annually.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ If not on treatment, no additional FAA review typically required.<br><br>
+        <strong>📋 Optional Documentation:</strong>
+        <ul>
+          <li>Baseline testosterone lab (optional)</li>
+          <li>Physician statement confirming no symptoms</li>
+        </ul>
+      </div>
+    `;
+  }
+}
