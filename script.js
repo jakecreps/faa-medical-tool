@@ -79,6 +79,14 @@ function showStep(stepId) {
   document.getElementById('thrombocytopenia')?.addEventListener('change', evaluateHematologicConditions);
   document.getElementById('anemia')?.addEventListener('change', evaluateHematologicConditions);
   document.getElementById('lymphoma')?.addEventListener('change', evaluateHematologicConditions);
+  document.getElementById('bladdercancer')?.addEventListener('change', evaluateOncologicConditions);
+  document.getElementById('breastcancer')?.addEventListener('change', evaluateOncologicConditions);
+  document.getElementById('coloncancer')?.addEventListener('change', evaluateOncologicConditions);
+  document.getElementById('melanoma')?.addEventListener('change', evaluateOncologicConditions);
+  document.getElementById('prostatecancer')?.addEventListener('change', evaluateOncologicConditions);
+  document.getElementById('renalcancer')?.addEventListener('change', evaluateOncologicConditions);
+  document.getElementById('testicularcancer')?.addEventListener('change', evaluateOncologicConditions);
+
 
   function evaluateCardioConditions() {
     evaluateAFib();
@@ -145,6 +153,16 @@ function showStep(stepId) {
     evaluateLymphoma();
   }
 
+  function evaluateOncologicConditions() {
+    evaluateBladderCancer();
+    evaluateBreastCancer();
+    evaluateColonCancer();
+    evaluateMelanoma();
+    evaluateProstateCancer();
+    evaluateRenalCancer();
+    evaluateTesticularCancer();
+  }
+
   function evaluateAllConditions() {
     evaluateCardioConditions();
     evaluateNeuroConditions();
@@ -154,6 +172,7 @@ function showStep(stepId) {
     evaluateENTConditions();
     evaluatePulmonaryConditions();
     evaluateHematologicConditions();
+    evaluateOncologicConditions();
   }
   
   // AFib
@@ -2331,6 +2350,374 @@ function showLymphomaChecklist(e) {
           <li>Current treatment plan from oncologist</li>
           <li>Progress updates and side effect summary</li>
           <li>Expected timeline for stabilization or remission</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Bladder Cancer
+function evaluateBladderCancer() {
+  const bc = document.getElementById('bladdercancer');
+  const bcInfo = document.getElementById('bladdercancer-info');
+  bcInfo.innerHTML = "";
+  if (!bc.checked) return;
+
+  bcInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧫 Are you currently in remission and off active cancer treatment?</label>
+      <select id="bc-remission">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="bc-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('bc-remission').addEventListener('change', showBladderCancerChecklist);
+}
+
+function showBladderCancerChecklist(e) {
+  const div = document.getElementById('bc-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Remission may qualify for FAA certification with sufficient documentation.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Oncology statement confirming remission</li>
+          <li>Pathology and staging reports</li>
+          <li>Last cystoscopy results or imaging</li>
+          <li>Functional assessment from urology/oncology</li>
+        </ul>
+        ⚠️ FAA may request periodic follow-up scans.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active bladder cancer or recent treatment defers certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Treatment plan and progress summary</li>
+          <li>Oncologist's functional assessment</li>
+          <li>Expected timeline for remission</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Breast Cancer
+function evaluateBreastCancer() {
+  const bc = document.getElementById('breastcancer');
+  const bcInfo = document.getElementById('breastcancer-info');
+  bcInfo.innerHTML = "";
+  if (!bc.checked) return;
+
+  bcInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🎗️ Are you currently in remission and free from impairing treatment side effects?</label>
+      <select id="bc-remission">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="bc-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('bc-remission').addEventListener('change', showBreastCancerChecklist);
+}
+
+function showBreastCancerChecklist(e) {
+  const div = document.getElementById('bc-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Remission with stable status is generally certifiable with proper documentation.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Oncologist statement confirming remission</li>
+          <li>Staging/pathology summary</li>
+          <li>Most recent mammogram or imaging report</li>
+          <li>Details on any ongoing medications (e.g., tamoxifen)</li>
+        </ul>
+        ⚠️ FAA may request annual updates.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active cancer or ongoing impairing treatment will defer certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current treatment plan from oncologist</li>
+          <li>Functional assessment of fitness to fly</li>
+          <li>Estimated timeline to remission or treatment completion</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Colon Cancer
+function evaluateColonCancer() {
+  const colon = document.getElementById('coloncancer');
+  const colonInfo = document.getElementById('coloncancer-info');
+  colonInfo.innerHTML = "";
+  if (!colon.checked) return;
+
+  colonInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧻 Are you in remission and free of gastrointestinal symptoms or treatment side effects?</label>
+      <select id="colon-remission">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="colon-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('colon-remission').addEventListener('change', showColonCancerChecklist);
+}
+
+function showColonCancerChecklist(e) {
+  const div = document.getElementById('colon-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Stable remission may be certifiable with documentation.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Oncologist statement confirming remission</li>
+          <li>Colonoscopy or imaging results (if applicable)</li>
+          <li>Histology/pathology report</li>
+          <li>Confirmation of no GI symptoms impairing function</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active disease or impairing symptoms defer certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Treatment plan from oncologist</li>
+          <li>Current functional assessment</li>
+          <li>Estimated timeline for remission</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Melanoma
+function evaluateMelanoma() {
+  const melanoma = document.getElementById('melanoma');
+  const melanomaInfo = document.getElementById('melanoma-info');
+  melanomaInfo.innerHTML = "";
+  if (!melanoma.checked) return;
+
+  melanomaInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>☀️ Was your melanoma in situ or Stage I, fully excised, and without recurrence?</label>
+      <select id="melanoma-stage">
+        <option value="">-- Select --</option>
+        <option value="early">Yes (in situ or Stage I, excised)</option>
+        <option value="advanced">No (Stage II or higher, or not excised)</option>
+      </select>
+      <div id="melanoma-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('melanoma-stage').addEventListener('change', showMelanomaChecklist);
+}
+
+function showMelanomaChecklist(e) {
+  const div = document.getElementById('melanoma-followup');
+  if (e.target.value === 'early') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Early-stage melanoma may be certifiable after complete excision.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Dermatologist or oncologist statement confirming full excision</li>
+          <li>Pathology report with stage and margins</li>
+          <li>Skin exam and follow-up plan</li>
+        </ul>
+        ⚠️ FAA may require periodic dermatologic surveillance.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Advanced melanoma requires FAA review for metastatic risk.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Oncology treatment summary</li>
+          <li>Brain MRI and PET/CT scan (if done)</li>
+          <li>Neurologic and cognitive status</li>
+          <li>Plan for surveillance and recurrence risk assessment</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Prostate Cancer
+function evaluateProstateCancer() {
+  const prostate = document.getElementById('prostatecancer');
+  const prostateInfo = document.getElementById('prostatecancer-info');
+  prostateInfo.innerHTML = "";
+  if (!prostate.checked) return;
+
+  prostateInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧬 Are you in remission or on stable, non-impairing treatment?</label>
+      <select id="prostate-remission">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="prostate-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('prostate-remission').addEventListener('change', showProstateCancerChecklist);
+}
+
+function showProstateCancerChecklist(e) {
+  const div = document.getElementById('prostate-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ FAA may approve certification with remission or stable treatment.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Urologist or oncologist statement of status</li>
+          <li>PSA levels and trend</li>
+          <li>Treatment summary (surgery, radiation, etc.)</li>
+          <li>Confirmation of no cognitive or physical impairments</li>
+        </ul>
+        ⚠️ Periodic updates may be requested by the FAA.
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active or progressing prostate cancer typically requires deferral.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current treatment plan and response</li>
+          <li>Functional and cognitive assessment</li>
+          <li>PSA trends and oncologist review</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Renal Cancer
+function evaluateRenalCancer() {
+  const renal = document.getElementById('renalcancer');
+  const renalInfo = document.getElementById('renalcancer-info');
+  renalInfo.innerHTML = "";
+  if (!renal.checked) return;
+
+  renalInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧫 Are you in remission with normal kidney function?</label>
+      <select id="renal-remission">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="renal-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('renal-remission').addEventListener('change', showRenalCancerChecklist);
+}
+
+function showRenalCancerChecklist(e) {
+  const div = document.getElementById('renal-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Renal cancer in remission with stable function may be certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Oncology/urology statement confirming remission</li>
+          <li>Imaging reports (CT/MRI)</li>
+          <li>Renal function labs (eGFR, creatinine)</li>
+          <li>Treatment summary</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active cancer or impaired renal function defers certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Current oncology/urology evaluation</li>
+          <li>Lab evidence of function and disease control</li>
+          <li>FAA may require periodic follow-up imaging</li>
+        </ul>
+      </div>
+    `;
+  }
+}
+
+// Testicular Cancer
+function evaluateTesticularCancer() {
+  const tc = document.getElementById('testicularcancer');
+  const tcInfo = document.getElementById('testicularcancer-info');
+  tcInfo.innerHTML = "";
+  if (!tc.checked) return;
+
+  tcInfo.innerHTML = `
+    <div class="medical-guidance">
+      <label>🧪 Are you currently in remission and off chemotherapy?</label>
+      <select id="tc-remission">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+      <div id="tc-followup"></div>
+    </div>
+  `;
+
+  document.getElementById('tc-remission').addEventListener('change', showTesticularCancerChecklist);
+}
+
+function showTesticularCancerChecklist(e) {
+  const div = document.getElementById('tc-followup');
+  if (e.target.value === 'yes') {
+    div.innerHTML = `
+      <div class="status-container status-ok">
+        ✅ Testicular cancer in remission is typically certifiable.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Oncologist or urologist statement confirming remission</li>
+          <li>Pathology and staging summary</li>
+          <li>Post-treatment imaging and tumor marker results</li>
+          <li>Statement of no cognitive or systemic side effects</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    div.innerHTML = `
+      <div class="status-container status-flag">
+        ⚠️ Active disease or recent chemotherapy defers certification.<br><br>
+        <strong>📋 Required Documentation:</strong>
+        <ul>
+          <li>Treatment plan and estimated duration</li>
+          <li>Functional and lab evaluations</li>
+          <li>FAA may require waiting period post-therapy</li>
         </ul>
       </div>
     `;
