@@ -12,10 +12,11 @@ function showStep(stepId) {
   // Summary
   function fillSummary() {
     document.getElementById('summaryName').innerText = document.getElementById('pilotName').value || 'Not provided';
+    document.getElementById('summaryCertNumber').innerText = document.getElementById('certNumber').value || 'Not provided';
+    document.getElementById('summaryMedExpiry').innerText = document.getElementById('medExpiry').value || 'Not provided';
     document.getElementById('summaryHours').innerText = document.getElementById('flightHours').value || 'Not provided';
-    document.getElementById('summaryCert').innerText = document.getElementById('certClass').value + ' Class';
-    document.getElementById('lowtestosterone')?.addEventListener('change', evaluateEndocrineConditions);
-  }
+    document.getElementById('summaryCert').innerText = document.getElementById('certClass').value || 'Not provided';
+  }  
   
   // Medications
   function evaluateMedications() {
